@@ -34,8 +34,7 @@ UPDATE orders SET ShipRegion ='EuroZone' WHERE ShipCountry ='France';
 SET SQL_SAFE_UPDATES=1;
 
 -- Delete all orders from `order details` that have quantity of 1. 
--- SHOW Tables;
-SELECT * FROM `order details`;
+-- SELECT * FROM `order details`;
 SET SQL_SAFE_UPDATES=0;
 DELETE FROM `order details` WHERE quantity = 1;
 SET SQL_SAFE_UPDATES=1;
@@ -51,25 +50,54 @@ SELECT max(quantity) FROM `order details`;
 SELECT min(quantity) FROM `order details`;
 
 -- Find the CustomerID that placed order 10290 (orders table)
-SELECT * FROM orders;
+-- SELECT * FROM orders;
 SELECT CustomerID FROM orders WHERE OrderID = 10290;
 
 -- Do an inner join, left join, right join on orders and customers tables. (These are three separate queries, one for each type of join.)
-
+SELECT * 
+	FROM customers
+    JOIN orders
+    ON customers.CustomerID = orders.CustomerID;
+    
+SELECT * 
+	FROM customers
+    LEFT JOIN orders
+    ON customers.CustomerID = orders.CustomerID;
+    
+SELECT * 
+	FROM customers
+    RIGHT JOIN orders
+    ON customers.CustomerID = orders.CustomerID;    
 
 
 -- Use a join to get the ship city and ship country of all the orders which are associated with an employee who is in London.
+-- SELECT * FROM orders;
+-- SELECT * FROM employees;
 
+SELECT orders.ShipCity, orders.ShipCountry
+FROM orders
+JOIN employees
+ON orders.EmployeeID=employees.EmployeeID WHERE employees.City = 'London';
 
 
 -- Use a join to get the ship name of all orders that include a discontinued product. (See orders, order details, and products. 1 means discontinued.)
+-- SELECT * FROM orders;
+-- SELECT * FROM `order details`;
+-- SELECT * FROM products;
 
+SELECT orders.ShipName
+FROM orders
+JOIN `order details`
+ON orders.OrderID = `order details`.OrderID
+JOIN products
+ON `order details`.ProductID = products.ProductID WHERE products.Discontinued = 1;
+-- SELECT COUNT(*) FROM `order details` WHERE ProductID = 5 || ProductID = 9 || ProductID = 17 || ProductID = 24 || ProductID = 28 || ProductID = 29 || ProductID = 42 || ProductID = 53 ;    // to check answer
 
 
 -- Get employees’ firstname for all employees who report to no one.
-SELECT * FROM employees;
+-- SELECT * FROM employees;
 SELECT FirstName FROM employees WHERE ReportsTo IS NULL ;
 
 -- Get employees’ firstname for all employees who report to Andrew.-- 
-SELECT * FROM employees;
+-- SELECT * FROM employees;
 SELECT e1.FirstName FROM employees AS e1 INNER JOIN employees AS e2 ON  e1.ReportsTo = e2.EmployeeID;
